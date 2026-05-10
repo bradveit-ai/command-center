@@ -24,9 +24,6 @@
   --green: #5a9966;
   --green-dim: #2e5238;
   --red: #9c4a4a;
-  --sync-ok: #5a9966;
-  --sync-err: #9c4a4a;
-  --sync-pending: #6b6860;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -57,22 +54,21 @@ body::after {
 .hdate { color: var(--dim); font-size: 10px; letter-spacing: 0.1em; }
 .anchor { margin-left: auto; font-family: 'Lora', serif; font-style: italic; color: var(--amber); font-size: 10px; opacity: 0.6; }
 
-/* SYNC INDICATOR */
 .sync-bar {
   padding: 4px 16px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 6px; flex-shrink: 0;
   font-size: 9px; letter-spacing: 0.1em; color: var(--dim);
+  cursor: default;
 }
 .sync-dot {
   width: 6px; height: 6px; border-radius: 50%;
-  background: var(--sync-pending); flex-shrink: 0; transition: background 0.3s;
+  background: var(--dim); flex-shrink: 0; transition: background 0.3s;
 }
-.sync-dot.ok { background: var(--sync-ok); }
-.sync-dot.err { background: var(--sync-err); }
+.sync-dot.ok { background: var(--green); }
+.sync-dot.err { background: var(--red); }
 .sync-dot.syncing { animation: pulse 1s infinite; background: var(--amber); }
-@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-.sync-label { transition: color 0.3s; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
 
 .sec-head {
   padding: 8px 16px 6px;
@@ -82,7 +78,6 @@ body::after {
 }
 .sec-head .badge { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--faint); }
 
-/* TIMER */
 .timer-wrap { padding: 16px 16px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .timer-num {
   font-family: 'Bebas Neue', sans-serif; font-size: 60px; letter-spacing: 0.04em;
@@ -101,7 +96,7 @@ body::after {
   font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
   padding: 3px 8px; border-radius: 2px; cursor: pointer; transition: all 0.15s;
 }
-.pre-btn:hover, .pre-btn.on { border-color: var(--amber-dim); color: var(--amber); background: var(--amber-glow); }
+.pre-btn:hover,.pre-btn.on { border-color: var(--amber-dim); color: var(--amber); background: var(--amber-glow); }
 .t-controls { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
 .t-btn {
   font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.1em;
@@ -123,7 +118,6 @@ body::after {
 .t-bar { height: 2px; background: var(--surface2); border-radius: 1px; overflow: hidden; }
 .t-fill { height: 100%; background: var(--amber); width: 0%; transition: width 1s linear; }
 
-/* TASKS */
 .task-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 .task-add { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .task-in {
@@ -177,7 +171,6 @@ body::after {
 }
 .btn-clear-t:hover { color: var(--dim); border-color: var(--border2); }
 
-/* MOVEMENT */
 .move-strip { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .m-stat { flex: 1; padding: 10px 14px; border-right: 1px solid var(--border); }
 .m-stat:last-child { border-right: none; flex: 2; }
@@ -191,7 +184,6 @@ body::after {
 .m-in::placeholder { color: var(--faint); }
 .m-unit { font-size: 9px; color: var(--faint); margin-top: 2px; letter-spacing: 0.1em; }
 
-/* SLEEP */
 .sleep-wrap { padding: 12px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .sleep-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .sl-field label { display: block; font-size: 9px; letter-spacing: 0.14em; color: var(--dim); text-transform: uppercase; margin-bottom: 4px; }
@@ -238,7 +230,6 @@ body::after {
 .sl-x { cursor: pointer; color: var(--faint); opacity: 0.4; font-size: 11px; }
 .sl-x:hover { opacity: 1; color: var(--red); }
 
-/* CHORES */
 .chores-section { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 .chore-add-row { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .chore-in {
@@ -265,16 +256,14 @@ body::after {
 .chore-item.drag-over { border-top: 2px solid var(--amber); }
 .drag-handle {
   color: var(--faint); cursor: grab; flex-shrink: 0;
-  display: flex; flex-direction: column; gap: 2px; align-items: center; padding: 2px;
-  transition: color 0.15s;
+  display: flex; flex-direction: column; gap: 2px; padding: 2px; transition: color 0.15s;
 }
 .drag-handle:active { cursor: grabbing; }
 .chore-item:hover .drag-handle { color: var(--dim); }
 .drag-handle span { display: block; width: 10px; height: 1px; background: currentColor; border-radius: 1px; }
 .c-chk {
   width: 12px; height: 12px; border: 1px solid var(--border2); border-radius: 2px;
-  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all 0.15s;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s;
 }
 .chore-item.done .c-chk { background: var(--green-dim); border-color: var(--green); }
 .c-chk::after {
@@ -283,13 +272,10 @@ body::after {
   transform: rotate(-45deg) translateY(-1px); opacity: 0; transition: opacity 0.1s;
 }
 .chore-item.done .c-chk::after { opacity: 1; }
-.c-name {
-  flex: 1; font-size: 11px; color: var(--text); cursor: pointer; line-height: 1.4;
-}
+.c-name { flex: 1; font-size: 11px; color: var(--text); cursor: pointer; line-height: 1.4; }
 .chore-item.done .c-name { color: var(--dim); text-decoration: line-through; text-decoration-color: var(--faint); }
 .c-del {
-  opacity: 0; color: var(--dim); font-size: 12px; cursor: pointer;
-  padding: 0 2px; transition: opacity 0.1s; flex-shrink: 0;
+  opacity: 0; color: var(--dim); font-size: 12px; cursor: pointer; padding: 0 2px; transition: opacity 0.1s; flex-shrink: 0;
 }
 .chore-item:hover .c-del { opacity: 0.35; }
 .c-del:hover { opacity: 1 !important; color: var(--red) !important; }
@@ -318,27 +304,23 @@ body::after {
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 
-@keyframes fadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+@keyframes fadeUp { from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none} }
 .sidebar > * { animation: fadeUp 0.3s ease both; }
 .main-col > * { animation: fadeUp 0.35s ease both; }
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="top-bar">
       <span class="logo">CMD</span>
       <span class="hdate" id="hdate"></span>
       <span class="anchor">vir certus</span>
     </div>
-
     <div class="sync-bar">
       <div class="sync-dot" id="syncDot"></div>
-      <span class="sync-label" id="syncLabel">connecting…</span>
+      <span id="syncLabel">connecting…</span>
     </div>
-
     <div class="sec-head">Focus Timer</div>
     <div class="timer-wrap">
       <div class="timer-num" id="timerNum">25:00</div>
@@ -357,7 +339,6 @@ body::after {
       <input type="text" class="t-task-in" id="tTaskIn" placeholder="What are you working on?">
       <div class="t-bar"><div class="t-fill" id="tFill"></div></div>
     </div>
-
     <div class="sec-head">Task Capture <span class="badge" id="taskBadge"></span></div>
     <div class="task-panel">
       <div class="task-add">
@@ -371,7 +352,6 @@ body::after {
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main-col">
     <div class="move-strip">
       <div class="m-stat">
@@ -395,22 +375,12 @@ body::after {
         <div class="m-unit">OPTIONAL</div>
       </div>
     </div>
-
     <div class="sec-head">Sleep Log</div>
     <div class="sleep-wrap">
       <div class="sleep-grid">
-        <div class="sl-field">
-          <label>Lights Out</label>
-          <input type="time" id="slBed">
-        </div>
-        <div class="sl-field">
-          <label>Wake Up</label>
-          <input type="time" id="slWake">
-        </div>
-        <div class="sl-field">
-          <label>Hours</label>
-          <input type="text" id="slHrs" placeholder="—" readonly style="color:var(--green);cursor:default;">
-        </div>
+        <div class="sl-field"><label>Lights Out</label><input type="time" id="slBed"></div>
+        <div class="sl-field"><label>Wake Up</label><input type="time" id="slWake"></div>
+        <div class="sl-field"><label>Hours</label><input type="text" id="slHrs" placeholder="—" readonly style="color:var(--green);cursor:default;"></div>
       </div>
       <div class="q-row">
         <span class="q-lbl">Quality</span>
@@ -426,7 +396,6 @@ body::after {
       </div>
       <div class="sl-history" id="slHistory"></div>
     </div>
-
     <div class="sec-head">Chore List <span class="badge" id="choreBadge"></span></div>
     <div class="chores-section">
       <div class="chore-add-row">
@@ -446,318 +415,278 @@ body::after {
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── SUPABASE CONFIG ───
-const SB_URL = 'https://zqdmxywinwbxhrrqcrx.supabase.co';
-const SB_KEY = 'sb_publishable_C0msJcUOkFTE2ncKaa33rA_M0taiHP2';
+// ─── CONFIG ───
+const SB_URL  = 'https://zqdmxywinwbxhrrqcrx.supabase.co';
+// Legacy anon JWT — safe for client-side personal tools
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxZG14eXdpbndieGhycnJxY3J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNjU1MTksImV4cCI6MjA5Mzk0MTUxOX0.yEkHrArXalsuSNNR5ipWlYZ7d6mvhIrgPjqnlkE_rTM';
 
-const sbHeaders = {
-  'Content-Type': 'application/json',
-  'apikey': SB_KEY,
-  'Authorization': `Bearer ${SB_KEY}`
+const HDRS = {
+  'Content-Type':  'application/json',
+  'apikey':        SB_ANON,
+  'Authorization': `Bearer ${SB_ANON}`
 };
 
 // ─── STATE ───
-// Local state — single object keyed by section
-let S = {
-  tasks: [],
-  sleep: [],
-  chores: [],
-  move: {}
-};
+let S = { tasks: [], sleep: [], chores: [], move: {} };
 
 // ─── SYNC ───
-let syncTimer = null;
-let syncPending = false;
+let _syncTimer = null;
 
-function setSyncStatus(status, msg) {
-  const dot = document.getElementById('syncDot');
-  const lbl = document.getElementById('syncLabel');
-  dot.className = 'sync-dot ' + status;
-  lbl.textContent = msg;
+function setSync(state, msg) {
+  document.getElementById('syncDot').className = 'sync-dot ' + state;
+  document.getElementById('syncLabel').textContent = msg;
 }
 
 async function pushKey(key) {
   try {
-    setSyncStatus('syncing', 'syncing…');
+    setSync('syncing', 'syncing…');
     const res = await fetch(`${SB_URL}/rest/v1/cmd_state`, {
-      method: 'POST',
-      headers: { ...sbHeaders, 'Prefer': 'resolution=merge-duplicates' },
-      body: JSON.stringify({ key, value: S[key], updated_at: new Date().toISOString() })
+      method:  'POST',
+      headers: { ...HDRS, 'Prefer': 'resolution=merge-duplicates' },
+      body:    JSON.stringify({ key, value: S[key], updated_at: new Date().toISOString() })
     });
-    if (!res.ok) throw new Error(await res.text());
-    setSyncStatus('ok', 'synced ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-  } catch (e) {
-    console.error('Sync error:', e);
-    setSyncStatus('err', 'sync failed — offline?');
+    if (!res.ok) {
+      const txt = await res.text();
+      console.error('Supabase push error:', res.status, txt);
+      setSync('err', `error ${res.status}`);
+      return;
+    }
+    setSync('ok', 'synced ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+  } catch(e) {
+    console.error('Supabase push exception:', e);
+    setSync('err', 'offline — saved locally');
   }
 }
 
-function schedulePush(key) {
-  clearTimeout(syncTimer);
-  syncTimer = setTimeout(() => pushKey(key), 800);
+function sync(key) {
+  saveLocal();
+  clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(() => pushKey(key), 600);
 }
 
 async function pullAll() {
   try {
-    setSyncStatus('syncing', 'loading…');
-    const res = await fetch(`${SB_URL}/rest/v1/cmd_state?select=key,value`, {
-      headers: sbHeaders
-    });
-    if (!res.ok) throw new Error(await res.text());
+    setSync('syncing', 'loading…');
+    const res = await fetch(`${SB_URL}/rest/v1/cmd_state?select=key,value`, { headers: HDRS });
+    if (!res.ok) {
+      const txt = await res.text();
+      console.error('Supabase pull error:', res.status, txt);
+      setSync('err', `load error ${res.status}`);
+      loadLocal();
+      return false;
+    }
     const rows = await res.json();
-    rows.forEach(row => {
-      if (S.hasOwnProperty(row.key) && row.value !== null) {
-        S[row.key] = row.value;
-      }
-    });
-    setSyncStatus('ok', 'synced ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    console.log('Pulled rows:', rows);
+    rows.forEach(r => { if (r.key in S && r.value !== null) S[r.key] = r.value; });
+    setSync('ok', 'synced ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
     return true;
-  } catch (e) {
-    console.error('Pull error:', e);
-    setSyncStatus('err', 'offline — changes saved locally');
-    // Fall back to localStorage
-    try {
-      const local = JSON.parse(localStorage.getItem('cmd_fallback') || '{}');
-      if (local.tasks) S.tasks = local.tasks;
-      if (local.sleep) S.sleep = local.sleep;
-      if (local.chores) S.chores = local.chores;
-      if (local.move) S.move = local.move;
-    } catch {}
+  } catch(e) {
+    console.error('Supabase pull exception:', e);
+    setSync('err', 'offline — using local data');
+    loadLocal();
     return false;
   }
 }
 
-// Also keep localStorage as offline fallback
 function saveLocal() {
-  try { localStorage.setItem('cmd_fallback', JSON.stringify(S)); } catch {}
+  try { localStorage.setItem('cmd_local', JSON.stringify(S)); } catch {}
+}
+function loadLocal() {
+  try {
+    const d = JSON.parse(localStorage.getItem('cmd_local') || '{}');
+    ['tasks','sleep','chores','move'].forEach(k => { if (d[k]) S[k] = d[k]; });
+  } catch {}
 }
 
-function saveAndSync(key) {
-  saveLocal();
-  schedulePush(key);
-}
-
-// ─── INIT ───
+// ─── UTILS ───
 const now = new Date();
-document.getElementById('hdate').textContent = now.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+document.getElementById('hdate').textContent = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
 
 let _tt;
 function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
-  clearTimeout(_tt); _tt = setTimeout(() => el.classList.remove('show'), 2400);
+  clearTimeout(_tt); _tt = setTimeout(()=>el.classList.remove('show'), 2400);
 }
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+// ─── TIMER ───
+let tM=25,tS=0,tTotal=1500,tIv=null,tRun=false;
+const tNum=document.getElementById('timerNum');
+const tFill=document.getElementById('tFill');
+const tLbl=document.getElementById('timerLbl');
+const tIn=document.getElementById('tTaskIn');
 
-// ─── TIMER (local only — no sync needed) ───
-let tMins = 25, tSecs = 0, tTotal = 1500, tIv = null, tRunning = false;
-const tNum = document.getElementById('timerNum');
-const tFill = document.getElementById('tFill');
-const tLbl = document.getElementById('timerLbl');
-const tIn = document.getElementById('tTaskIn');
+tIn.addEventListener('input',()=>{ tLbl.textContent=tIn.value.trim()||'—'; });
 
-tIn.addEventListener('input', () => { tLbl.textContent = tIn.value.trim() || '—'; });
-
-document.querySelectorAll('.pre-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (tRunning) return;
-    document.querySelectorAll('.pre-btn').forEach(b => b.classList.remove('on'));
-    btn.classList.add('on');
-    tMins = parseInt(btn.dataset.m); tSecs = 0; tTotal = tMins * 60;
-    updTimer(); tFill.style.width = '0%';
+document.querySelectorAll('.pre-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(tRun) return;
+    document.querySelectorAll('.pre-btn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    tM=parseInt(b.dataset.m); tS=0; tTotal=tM*60;
+    updT(); tFill.style.width='0%';
   });
 });
 
-function updTimer() {
-  tNum.textContent = `${String(tMins).padStart(2,'0')}:${String(tSecs).padStart(2,'0')}`;
-}
-function tick() {
-  if (tMins === 0 && tSecs === 0) {
-    clearInterval(tIv); tRunning = false;
+function updT(){ tNum.textContent=`${String(tM).padStart(2,'0')}:${String(tS).padStart(2,'0')}`; }
+
+function tick(){
+  if(tM===0&&tS===0){
+    clearInterval(tIv); tRun=false;
     tNum.classList.remove('running'); tNum.classList.add('done');
-    tFill.style.width = '100%';
+    tFill.style.width='100%';
     toast('Session complete. Late is not lost.'); return;
   }
-  if (tSecs === 0) { tMins--; tSecs = 59; } else tSecs--;
-  updTimer();
-  tFill.style.width = `${((tTotal - (tMins*60+tSecs)) / tTotal) * 100}%`;
+  if(tS===0){tM--;tS=59;}else tS--;
+  updT();
+  tFill.style.width=`${((tTotal-(tM*60+tS))/tTotal)*100}%`;
 }
-document.getElementById('tStart').addEventListener('click', () => {
-  if (tRunning) return;
-  tRunning = true; tNum.classList.add('running'); tNum.classList.remove('done');
-  tIv = setInterval(tick, 1000);
+
+document.getElementById('tStart').addEventListener('click',()=>{
+  if(tRun) return; tRun=true;
+  tNum.classList.add('running'); tNum.classList.remove('done');
+  tIv=setInterval(tick,1000);
 });
-document.getElementById('tPause').addEventListener('click', () => {
-  if (!tRunning) return; clearInterval(tIv); tRunning = false; tNum.classList.remove('running');
+document.getElementById('tPause').addEventListener('click',()=>{
+  if(!tRun) return; clearInterval(tIv); tRun=false; tNum.classList.remove('running');
 });
-document.getElementById('tReset').addEventListener('click', () => {
-  clearInterval(tIv); tRunning = false; tNum.classList.remove('running','done');
-  const a = document.querySelector('.pre-btn.on');
-  tMins = a ? parseInt(a.dataset.m) : 25; tSecs = 0; tTotal = tMins * 60;
-  updTimer(); tFill.style.width = '0%';
+document.getElementById('tReset').addEventListener('click',()=>{
+  clearInterval(tIv); tRun=false; tNum.classList.remove('running','done');
+  const a=document.querySelector('.pre-btn.on');
+  tM=a?parseInt(a.dataset.m):25; tS=0; tTotal=tM*60;
+  updT(); tFill.style.width='0%';
 });
 
 // ─── TASKS ───
-function addTask() {
-  const name = document.getElementById('taskIn').value.trim();
-  if (!name) return;
-  S.tasks.push({ name, done: false, id: Date.now() });
-  saveAndSync('tasks');
-  document.getElementById('taskIn').value = '';
-  renderTasks();
+function addTask(){
+  const name=document.getElementById('taskIn').value.trim();
+  if(!name) return;
+  S.tasks.push({name,done:false,id:Date.now()});
+  sync('tasks'); document.getElementById('taskIn').value=''; renderTasks();
 }
-document.getElementById('addTaskBtn').addEventListener('click', addTask);
-document.getElementById('taskIn').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
-document.getElementById('clearTasksBtn').addEventListener('click', () => {
-  S.tasks = S.tasks.filter(t => !t.done); saveAndSync('tasks'); renderTasks();
+document.getElementById('addTaskBtn').addEventListener('click',addTask);
+document.getElementById('taskIn').addEventListener('keydown',e=>{if(e.key==='Enter')addTask();});
+document.getElementById('clearTasksBtn').addEventListener('click',()=>{
+  S.tasks=S.tasks.filter(t=>!t.done); sync('tasks'); renderTasks();
 });
 
-function renderTasks() {
-  const tasks = S.tasks || [];
-  const open = tasks.filter(t => !t.done).length;
-  document.getElementById('taskBadge').textContent = open ? `${open} open` : tasks.length ? 'all done' : '';
-  const el = document.getElementById('taskScroll');
-  if (!tasks.length) {
-    el.innerHTML = '<div style="padding:12px 16px;color:var(--faint);font-style:italic;font-size:10px;">Nothing captured yet.</div>';
-    return;
-  }
-  el.innerHTML = tasks.map(t => `
-    <div class="task-item ${t.done ? 'done' : ''}" data-id="${t.id}">
+function renderTasks(){
+  const tasks=S.tasks||[];
+  const open=tasks.filter(t=>!t.done).length;
+  document.getElementById('taskBadge').textContent=open?`${open} open`:tasks.length?'all done':'';
+  const el=document.getElementById('taskScroll');
+  if(!tasks.length){ el.innerHTML='<div style="padding:12px 16px;color:var(--faint);font-style:italic;font-size:10px;">Nothing captured yet.</div>'; return; }
+  el.innerHTML=tasks.map(t=>`
+    <div class="task-item ${t.done?'done':''}" data-id="${t.id}">
       <div class="t-chk"></div>
       <span class="t-name">${esc(t.name)}</span>
-      ${!t.done ? `<button class="t-focus-btn" data-n="${esc(t.name)}">▶ focus</button>` : ''}
+      ${!t.done?`<button class="t-focus-btn" data-n="${esc(t.name)}">▶ focus</button>`:''}
       <span class="t-del" data-id="${t.id}">✕</span>
     </div>`).join('');
-  el.querySelectorAll('.task-item').forEach(item => {
-    item.addEventListener('click', e => {
-      if (e.target.classList.contains('t-del') || e.target.classList.contains('t-focus-btn')) return;
-      const t = S.tasks.find(t => t.id == item.dataset.id);
-      if (t) { t.done = !t.done; saveAndSync('tasks'); renderTasks(); }
+  el.querySelectorAll('.task-item').forEach(item=>{
+    item.addEventListener('click',e=>{
+      if(e.target.classList.contains('t-del')||e.target.classList.contains('t-focus-btn')) return;
+      const t=S.tasks.find(t=>t.id==item.dataset.id);
+      if(t){t.done=!t.done; sync('tasks'); renderTasks();}
     });
   });
-  el.querySelectorAll('.t-del').forEach(btn => {
-    btn.addEventListener('click', e => {
+  el.querySelectorAll('.t-del').forEach(btn=>{
+    btn.addEventListener('click',e=>{
       e.stopPropagation();
-      S.tasks = S.tasks.filter(t => t.id != btn.dataset.id); saveAndSync('tasks'); renderTasks();
+      S.tasks=S.tasks.filter(t=>t.id!=btn.dataset.id); sync('tasks'); renderTasks();
     });
   });
-  el.querySelectorAll('.t-focus-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
+  el.querySelectorAll('.t-focus-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
       e.stopPropagation();
-      tIn.value = btn.dataset.n; tLbl.textContent = btn.dataset.n;
+      tIn.value=btn.dataset.n; tLbl.textContent=btn.dataset.n;
       toast('Loaded into timer. Start when ready.');
     });
   });
 }
 
 // ─── MOVEMENT ───
-function loadMove() {
-  const m = S.move || {};
-  if (m.date === now.toDateString()) {
-    ['mSteps','mWalk','mRide','mNotes'].forEach(id => {
-      document.getElementById(id).value = m[id] || '';
-    });
+function loadMove(){
+  const m=S.move||{};
+  if(m.date===now.toDateString()){
+    ['mSteps','mWalk','mRide','mNotes'].forEach(id=>{ document.getElementById(id).value=m[id]||''; });
   }
 }
-function saveMove() {
-  S.move = {
-    date: now.toDateString(),
-    mSteps: document.getElementById('mSteps').value,
-    mWalk: document.getElementById('mWalk').value,
-    mRide: document.getElementById('mRide').value,
-    mNotes: document.getElementById('mNotes').value
-  };
-  saveAndSync('move');
+function saveMove(){
+  S.move={date:now.toDateString(),mSteps:document.getElementById('mSteps').value,mWalk:document.getElementById('mWalk').value,mRide:document.getElementById('mRide').value,mNotes:document.getElementById('mNotes').value};
+  sync('move');
 }
-['mSteps','mWalk','mRide','mNotes'].forEach(id => document.getElementById(id).addEventListener('input', saveMove));
+['mSteps','mWalk','mRide','mNotes'].forEach(id=>document.getElementById(id).addEventListener('input',saveMove));
 
 // ─── SLEEP ───
-let slQ = null;
-const slBed = document.getElementById('slBed');
-const slWake = document.getElementById('slWake');
-const slHrs = document.getElementById('slHrs');
+let slQ=null;
+const slBed=document.getElementById('slBed'),slWake=document.getElementById('slWake'),slHrs=document.getElementById('slHrs');
 
-function calcHrs() {
-  if (!slBed.value || !slWake.value) { slHrs.value = ''; return; }
-  const [bh,bm] = slBed.value.split(':').map(Number);
-  const [wh,wm] = slWake.value.split(':').map(Number);
-  let m = (wh*60+wm)-(bh*60+bm); if (m<0) m+=1440;
-  slHrs.value = (m/60).toFixed(1)+'h';
+function calcHrs(){
+  if(!slBed.value||!slWake.value){slHrs.value='';return;}
+  const[bh,bm]=slBed.value.split(':').map(Number);
+  const[wh,wm]=slWake.value.split(':').map(Number);
+  let m=(wh*60+wm)-(bh*60+bm); if(m<0)m+=1440;
+  slHrs.value=(m/60).toFixed(1)+'h';
 }
-slBed.addEventListener('change', calcHrs);
-slWake.addEventListener('change', calcHrs);
+slBed.addEventListener('change',calcHrs);
+slWake.addEventListener('change',calcHrs);
 
-document.querySelectorAll('.q-dot').forEach(d => {
-  d.addEventListener('click', () => {
-    document.querySelectorAll('.q-dot').forEach(x => x.classList.remove('on'));
-    d.classList.add('on'); slQ = d.dataset.q;
-  });
+document.querySelectorAll('.q-dot').forEach(d=>{
+  d.addEventListener('click',()=>{ document.querySelectorAll('.q-dot').forEach(x=>x.classList.remove('on')); d.classList.add('on'); slQ=d.dataset.q; });
 });
 
-document.getElementById('logSlBtn').addEventListener('click', () => {
-  if (!slBed.value && !slWake.value) return;
-  const emj = ['😮‍💨','😑','😐','🙂','😌'];
-  S.sleep.unshift({
-    date: now.toLocaleDateString('en-US',{month:'short',day:'numeric'}),
-    hrs: slHrs.value || '—',
-    q: slQ ? emj[slQ-1] : '',
-    note: document.getElementById('slNote').value.trim(),
-    id: Date.now()
-  });
-  saveAndSync('sleep');
-  slBed.value=''; slWake.value=''; slHrs.value='';
-  document.getElementById('slNote').value='';
-  document.querySelectorAll('.q-dot').forEach(d=>d.classList.remove('on')); slQ=null;
-  renderSleep(); toast('Sleep logged.');
+document.getElementById('logSlBtn').addEventListener('click',()=>{
+  if(!slBed.value&&!slWake.value) return;
+  const emj=['😮‍💨','😑','😐','🙂','😌'];
+  S.sleep.unshift({date:now.toLocaleDateString('en-US',{month:'short',day:'numeric'}),hrs:slHrs.value||'—',q:slQ?emj[slQ-1]:'',note:document.getElementById('slNote').value.trim(),id:Date.now()});
+  sync('sleep');
+  slBed.value='';slWake.value='';slHrs.value='';document.getElementById('slNote').value='';
+  document.querySelectorAll('.q-dot').forEach(d=>d.classList.remove('on'));slQ=null;
+  renderSleep();toast('Sleep logged.');
 });
 
-function renderSleep() {
-  const log = S.sleep || [];
-  const el = document.getElementById('slHistory');
-  if (!log.length) { el.innerHTML=''; return; }
-  el.innerHTML = log.slice(0,5).map(s=>`
+function renderSleep(){
+  const log=S.sleep||[];
+  const el=document.getElementById('slHistory');
+  if(!log.length){el.innerHTML='';return;}
+  el.innerHTML=log.slice(0,5).map(s=>`
     <div class="sl-rec">
-      <span class="sl-dt">${s.date}</span>
-      <span class="sl-h">${s.hrs}</span>
-      <span class="sl-q">${s.q}</span>
-      <span class="sl-n">${esc(s.note||'')}</span>
+      <span class="sl-dt">${s.date}</span><span class="sl-h">${s.hrs}</span>
+      <span class="sl-q">${s.q}</span><span class="sl-n">${esc(s.note||'')}</span>
       <span class="sl-x" data-id="${s.id}">✕</span>
     </div>`).join('');
-  el.querySelectorAll('.sl-x').forEach(btn => {
-    btn.addEventListener('click', () => {
-      S.sleep = S.sleep.filter(s=>s.id!=btn.dataset.id); saveAndSync('sleep'); renderSleep();
-    });
+  el.querySelectorAll('.sl-x').forEach(btn=>{
+    btn.addEventListener('click',()=>{ S.sleep=S.sleep.filter(s=>s.id!=btn.dataset.id); sync('sleep'); renderSleep(); });
   });
 }
 
 // ─── CHORES ───
-let dragSrc = null;
+let dragSrc=null;
 
-function addChore() {
-  const name = document.getElementById('choreIn').value.trim();
-  if (!name) return;
-  S.chores.push({ id: Date.now(), name, done: false });
-  saveAndSync('chores');
-  document.getElementById('choreIn').value = '';
-  renderChores();
+function addChore(){
+  const name=document.getElementById('choreIn').value.trim();
+  if(!name) return;
+  S.chores.push({id:Date.now(),name,done:false});
+  sync('chores'); document.getElementById('choreIn').value=''; renderChores();
 }
-document.getElementById('addChoreBtn').addEventListener('click', addChore);
-document.getElementById('choreIn').addEventListener('keydown', e => { if(e.key==='Enter') addChore(); });
-document.getElementById('clearDoneChores').addEventListener('click', () => {
-  S.chores = S.chores.filter(c=>!c.done); saveAndSync('chores'); renderChores();
+document.getElementById('addChoreBtn').addEventListener('click',addChore);
+document.getElementById('choreIn').addEventListener('keydown',e=>{if(e.key==='Enter')addChore();});
+document.getElementById('clearDoneChores').addEventListener('click',()=>{
+  S.chores=S.chores.filter(c=>!c.done); sync('chores'); renderChores();
 });
 
-function renderChores() {
-  const chores = S.chores || [];
-  const done = chores.filter(c=>c.done).length;
-  document.getElementById('choreBadge').textContent = chores.length ? `${done}/${chores.length}` : '';
-  const list = document.getElementById('choreList');
-  if (!chores.length) {
-    list.innerHTML = '<li style="padding:12px 16px;color:var(--faint);font-style:italic;font-size:10px;">No chores yet — add one above.</li>';
+function renderChores(){
+  const chores=S.chores||[];
+  const done=chores.filter(c=>c.done).length;
+  document.getElementById('choreBadge').textContent=chores.length?`${done}/${chores.length}`:'';
+  const list=document.getElementById('choreList');
+  if(!chores.length){
+    list.innerHTML='<li style="padding:12px 16px;color:var(--faint);font-style:italic;font-size:10px;">No chores yet.</li>';
     return;
   }
-  list.innerHTML = chores.map(c=>`
+  list.innerHTML=chores.map(c=>`
     <li class="chore-item ${c.done?'done':''}" data-id="${c.id}" draggable="true">
       <div class="drag-handle"><span></span><span></span><span></span></div>
       <div class="c-chk"></div>
@@ -765,70 +694,61 @@ function renderChores() {
       <span class="c-del" data-id="${c.id}">✕</span>
     </li>`).join('');
 
-  list.querySelectorAll('.chore-item').forEach(item => {
-    item.querySelector('.c-chk').addEventListener('click', e => {
+  list.querySelectorAll('.chore-item').forEach(item=>{
+    item.querySelector('.c-chk').addEventListener('click',e=>{
       e.stopPropagation();
-      const c = S.chores.find(c=>c.id==item.dataset.id);
-      if (c) { c.done=!c.done; saveAndSync('chores'); renderChores(); if(c.done) toast('One degree forward.'); }
+      const c=S.chores.find(c=>c.id==item.dataset.id);
+      if(c){c.done=!c.done;sync('chores');renderChores();if(c.done)toast('One degree forward.');}
     });
-    item.querySelector('.c-name').addEventListener('click', () => {
-      const c = S.chores.find(c=>c.id==item.dataset.id);
-      if (c) { c.done=!c.done; saveAndSync('chores'); renderChores(); if(c.done) toast('One degree forward.'); }
+    item.querySelector('.c-name').addEventListener('click',()=>{
+      const c=S.chores.find(c=>c.id==item.dataset.id);
+      if(c){c.done=!c.done;sync('chores');renderChores();if(c.done)toast('One degree forward.');}
     });
-    item.querySelector('.c-del').addEventListener('click', e => {
+    item.querySelector('.c-del').addEventListener('click',e=>{
       e.stopPropagation();
-      S.chores = S.chores.filter(c=>c.id!=e.target.dataset.id);
-      saveAndSync('chores'); renderChores();
+      S.chores=S.chores.filter(c=>c.id!=e.target.dataset.id);
+      sync('chores');renderChores();
     });
-    item.addEventListener('dragstart', e => {
-      dragSrc = item; item.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    item.addEventListener('dragend', () => {
+    item.addEventListener('dragstart',e=>{dragSrc=item;item.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+    item.addEventListener('dragend',()=>{
       item.classList.remove('dragging');
       list.querySelectorAll('.chore-item').forEach(i=>i.classList.remove('drag-over'));
-      dragSrc = null;
+      dragSrc=null;
     });
-    item.addEventListener('dragover', e => {
+    item.addEventListener('dragover',e=>{
       e.preventDefault();
-      if (item !== dragSrc) {
-        list.querySelectorAll('.chore-item').forEach(i=>i.classList.remove('drag-over'));
-        item.classList.add('drag-over');
-      }
+      if(item!==dragSrc){list.querySelectorAll('.chore-item').forEach(i=>i.classList.remove('drag-over'));item.classList.add('drag-over');}
     });
-    item.addEventListener('dragleave', () => item.classList.remove('drag-over'));
-    item.addEventListener('drop', e => {
+    item.addEventListener('dragleave',()=>item.classList.remove('drag-over'));
+    item.addEventListener('drop',e=>{
       e.preventDefault();
-      if (!dragSrc || dragSrc===item) return;
+      if(!dragSrc||dragSrc===item) return;
       item.classList.remove('drag-over');
-      const srcId = parseInt(dragSrc.dataset.id);
-      const tgtId = parseInt(item.dataset.id);
-      const si = S.chores.findIndex(c=>c.id===srcId);
-      const ti = S.chores.findIndex(c=>c.id===tgtId);
-      if (si===-1||ti===-1) return;
-      const [moved] = S.chores.splice(si,1);
-      S.chores.splice(ti,0,moved);
-      saveAndSync('chores'); renderChores();
+      const si=parseInt(dragSrc.dataset.id),ti=parseInt(item.dataset.id);
+      const sIdx=S.chores.findIndex(c=>c.id===si),tIdx=S.chores.findIndex(c=>c.id===ti);
+      if(sIdx===-1||tIdx===-1) return;
+      const[moved]=S.chores.splice(sIdx,1);
+      S.chores.splice(tIdx,0,moved);
+      sync('chores');renderChores();
     });
   });
 }
 
 // ─── BOOT ───
-async function boot() {
-  // Seed default chores only on first ever load
-  const online = await pullAll();
+async function boot(){
+  await pullAll();
 
-  // If chores came back empty from DB and no local fallback, seed defaults
-  if (!S.chores || !S.chores.length) {
-    S.chores = [
-      { id: 1, name: 'Vacuum main floor', done: false },
-      { id: 2, name: 'Wipe counters', done: false },
-      { id: 3, name: 'Take out trash', done: false },
-      { id: 4, name: 'Mop kitchen', done: false },
-      { id: 5, name: 'Laundry', done: false },
-      { id: 6, name: 'Bathrooms', done: false },
+  // Seed default chores only if completely empty
+  if(!S.chores||!S.chores.length){
+    S.chores=[
+      {id:1,name:'Vacuum main floor',done:false},
+      {id:2,name:'Wipe counters',done:false},
+      {id:3,name:'Take out trash',done:false},
+      {id:4,name:'Mop kitchen',done:false},
+      {id:5,name:'Laundry',done:false},
+      {id:6,name:'Bathrooms',done:false},
     ];
-    saveAndSync('chores');
+    sync('chores');
   }
 
   loadMove();
