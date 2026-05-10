@@ -414,17 +414,13 @@ body::after {
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ─── CONFIG ───
-const SB_URL  = 'https://zqdmxyywinwbxhrrqcrx.supabase.co';
-// Legacy anon JWT — safe for client-side personal tools
+const SB_URL  = 'https://zqdmxywinwbxhrrqcrx.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxZG14eXdpbndieGhycnJxY3J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNjU1MTksImV4cCI6MjA5Mzk0MTUxOX0.yEkHrArXalsuSNNR5ipWlYZ7d6mvhIrgPjqnlkE_rTM';
 
-const HDRS = {
-  'Content-Type':  'application/json',
-  'apikey':        SB_ANON,
-  'Authorization': `Bearer ${SB_ANON}`
-};
+const sb = supabase.createClient(SB_URL, SB_ANON);
 
 // ─── STATE ───
 let S = { tasks: [], sleep: [], chores: [], move: {} };
@@ -440,15 +436,13 @@ function setSync(state, msg) {
 async function pushKey(key) {
   try {
     setSync('syncing', 'syncing…');
-    const res = await fetch(`${SB_URL}/rest/v1/cmd_state`, {
-      method:  'POST',
-      headers: { ...HDRS, 'Prefer': 'resolution=merge-duplicates' },
-      body:    JSON.stringify({ key, value: S[key], updated_at: new Date().toISOString() })
-    });
-    if (!res.ok) {
-      const txt = await res.text();
-      console.error('Supabase push error:', res.status, txt);
-      setSync('err', `error ${res.status}`);
+    const { error } = await sb.from('cmd_state').upsert(
+      { key, value: S[key], updated_at: new Date().toISOString() },
+      { onConflict: 'key' }
+    );
+    if (error) {
+      console.error('Supabase push error:', error);
+      setSync('err', `error: ${error.message}`);
       return;
     }
     setSync('ok', 'synced ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
@@ -467,17 +461,15 @@ function sync(key) {
 async function pullAll() {
   try {
     setSync('syncing', 'loading…');
-    const res = await fetch(`${SB_URL}/rest/v1/cmd_state?select=key,value`, { headers: HDRS });
-    if (!res.ok) {
-      const txt = await res.text();
-      console.error('Supabase pull error:', res.status, txt);
-      setSync('err', `load error ${res.status}`);
+    const { data, error } = await sb.from('cmd_state').select('key, value');
+    if (error) {
+      console.error('Supabase pull error:', error);
+      setSync('err', `load error: ${error.message}`);
       loadLocal();
       return false;
     }
-    const rows = await res.json();
-    console.log('Pulled rows:', rows);
-    rows.forEach(r => { if (r.key in S && r.value !== null) S[r.key] = r.value; });
+    console.log('Pulled rows:', data);
+    data.forEach(r => { if (r.key in S && r.value !== null) S[r.key] = r.value; });
     setSync('ok', 'synced ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
     return true;
   } catch(e) {
