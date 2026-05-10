@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>3·2·1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a09;
+  --surface: #131312;
+  --border: #222220;
+  --text: #e8e3d8;
+  --dim: #a8a39a;
+  --faint: #5a5850;
+  --amber: #c8872a;
+  --amber-dim: #6b4a18;
+  --amber-glow: rgba(200,135,42,0.08);
+  --red: #c04040;
+  --green: #5a9966;
+  --num-3: #c8872a;
+  --num-2: #a06828;
+  --num-1: #7a4e20;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html { background: var(--bg); }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 15px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; min-height: 100dvh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── HOME ── */
+.home {
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  text-align: center;
+  gap: 0;
+}
+
+.home-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  letter-spacing: 0.12em;
+  color: var(--amber);
+  line-height: 1;
+  margin-bottom: 4px;
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 20px rgba(200,135,42,0.15); }
+  to   { text-shadow: 0 0 40px rgba(200,135,42,0.35); }
+}
+
+.home-sub {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--faint);
+  letter-spacing: 0.08em;
+  margin-bottom: 56px;
+}
+
+.home-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 56px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.home-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+}
+
+.home-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 44px;
+}
+
+.home-num.n3 { color: var(--num-3); }
+.home-num.n2 { color: var(--num-2); }
+.home-num.n1 { color: var(--num-1); }
+
+.home-item-text {
+  font-family: 'Lora', serif;
+  font-size: 15px;
+  color: var(--dim);
+  line-height: 1.4;
+}
+
+.home-item-text strong { color: var(--text); font-weight: 600; }
+
+.btn-begin {
+  width: 100%;
+  max-width: 300px;
+  background: var(--amber-glow);
+  border: 1px solid var(--amber-dim);
+  color: var(--amber);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.2em;
+  padding: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  margin-bottom: 24px;
+}
+.btn-begin:active { background: rgba(200,135,42,0.15); }
+
+.btn-history {
+  background: transparent;
+  border: none;
+  color: var(--faint);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  padding: 8px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── JOURNAL ENTRY ── */
+.entry-screen {
+  padding: 0;
+}
+
+.entry-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.btn-back {
+  background: transparent;
+  border: none;
+  color: var(--faint);
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px 8px 4px 0;
+  line-height: 1;
+}
+
+.entry-date {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.entry-sync {
+  margin-left: auto;
+  font-size: 9px;
+  color: var(--faint);
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sync-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--faint); flex-shrink: 0; transition: background 0.3s;
+}
+.sync-dot.ok { background: var(--green); }
+.sync-dot.err { background: var(--red); }
+.sync-dot.syncing { animation: pulse 1s infinite; background: var(--amber); }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+.entry-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.prompt-block { display: flex; flex-direction: column; gap: 14px; }
+
+.prompt-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.prompt-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 44px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.prompt-num.n3 { color: var(--num-3); }
+.prompt-num.n2 { color: var(--num-2); }
+.prompt-num.n1 { color: var(--num-1); }
+
+.prompt-label {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--dim);
+  line-height: 1.3;
+}
+
+.prompt-inputs { display: flex; flex-direction: column; gap: 10px; }
+
+.prompt-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: 'Lora', serif;
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  outline: none;
+  resize: none;
+  transition: border-color 0.15s;
+  min-height: 52px;
+  -webkit-appearance: none;
+}
+
+.prompt-input:focus {
+  border-color: var(--amber-dim);
+}
+
+.prompt-input::placeholder {
+  color: var(--faint);
+  font-style: italic;
+}
+
+/* single input for forward focus */
+.prompt-input.single { min-height: 80px; }
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 -24px;
+}
+
+.entry-footer {
+  padding: 20px 24px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.btn-save {
+  width: 100%;
+  background: var(--amber-glow);
+  border: 1px solid var(--amber-dim);
+  color: var(--amber);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.18em;
+  padding: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-save:active { background: rgba(200,135,42,0.15); }
+.btn-save:disabled { opacity: 0.4; cursor: default; }
+
+/* ── HISTORY ── */
+.history-screen { }
+
+.hist-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.hist-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.18em;
+  color: var(--text);
+}
+
+.hist-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0 40px;
+}
+
+.hist-entry {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.hist-entry:active { background: var(--surface); }
+
+.hist-entry-date {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.hist-preview {
+  font-family: 'Lora', serif;
+  font-size: 14px;
+  color: var(--dim);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hist-empty {
+  padding: 60px 24px;
+  text-align: center;
+  font-family: 'Lora', serif;
+  font-style: italic;
+  color: var(--faint);
+  font-size: 15px;
+}
+
+/* ── VIEW ENTRY ── */
+.view-screen { }
+
+.view-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.view-date {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.btn-delete {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--faint);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.btn-delete:active { color: var(--red); }
+
+.view-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.view-section { }
+
+.view-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.view-section-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  line-height: 1;
+}
+.view-section-num.n3 { color: var(--num-3); }
+.view-section-num.n2 { color: var(--num-2); }
+.view-section-num.n1 { color: var(--num-1); }
+
+.view-section-lbl {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--faint);
+}
+
+.view-items { display: flex; flex-direction: column; gap: 8px; }
+
+.view-item {
+  font-family: 'Lora', serif;
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.5;
+  padding: 10px 14px;
+  background: var(--surface);
+  border-radius: 3px;
+  border-left: 2px solid var(--border);
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: var(--surface);
+  border: 1px solid var(--amber-dim);
+  color: var(--amber);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 10px 20px;
+  border-radius: 24px;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 9999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="screen active" id="homeScreen">
+  <div class="home screen active">
+    <div class="home-logo">3·2·1</div>
+    <div class="home-sub">end of day · 5 minutes</div>
+
+    <div class="home-desc">
+      <div class="home-item">
+        <div class="home-num n3">3</div>
+        <div class="home-item-text"><strong>things you did well</strong></div>
+      </div>
+      <div class="home-item">
+        <div class="home-num n2">2</div>
+        <div class="home-item-text"><strong>things you struggled with</strong></div>
+      </div>
+      <div class="home-item">
+        <div class="home-num n1">1</div>
+        <div class="home-item-text"><strong>forward focus</strong></div>
+      </div>
+    </div>
+
+    <button class="btn-begin" id="btnBegin">BEGIN</button>
+    <button class="btn-history" id="btnHistory">past entries</button>
+  </div>
+</div>
+
+<!-- ENTRY -->
+<div class="screen" id="entryScreen">
+  <div class="entry-header">
+    <button class="btn-back" id="entryBack">←</button>
+    <span class="entry-date" id="entryDateLabel"></span>
+    <div class="entry-sync">
+      <div class="sync-dot" id="syncDot"></div>
+      <span id="syncLabel">—</span>
+    </div>
+  </div>
+
+  <div class="entry-body">
+    <!-- 3 things you did well -->
+    <div class="prompt-block">
+      <div class="prompt-header">
+        <div class="prompt-num n3">3</div>
+        <div class="prompt-label">things you did well</div>
+      </div>
+      <div class="prompt-inputs">
+        <textarea class="prompt-input" id="well1" placeholder="First…" rows="2"></textarea>
+        <textarea class="prompt-input" id="well2" placeholder="Second…" rows="2"></textarea>
+        <textarea class="prompt-input" id="well3" placeholder="Third…" rows="2"></textarea>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 2 things you struggled with -->
+    <div class="prompt-block">
+      <div class="prompt-header">
+        <div class="prompt-num n2">2</div>
+        <div class="prompt-label">things you struggled with</div>
+      </div>
+      <div class="prompt-inputs">
+        <textarea class="prompt-input" id="struggle1" placeholder="First…" rows="2"></textarea>
+        <textarea class="prompt-input" id="struggle2" placeholder="Second…" rows="2"></textarea>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 1 forward focus -->
+    <div class="prompt-block">
+      <div class="prompt-header">
+        <div class="prompt-num n1">1</div>
+        <div class="prompt-label">forward focus</div>
+      </div>
+      <div class="prompt-inputs">
+        <textarea class="prompt-input single" id="forward" placeholder="Tomorrow I will…" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry-footer">
+    <button class="btn-save" id="btnSave">SAVE ENTRY</button>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="screen" id="historyScreen">
+  <div class="hist-header">
+    <button class="btn-back" id="histBack">←</button>
+    <span class="hist-title">Past Entries</span>
+  </div>
+  <div class="hist-body" id="histBody"></div>
+</div>
+
+<!-- VIEW ENTRY -->
+<div class="screen" id="viewScreen">
+  <div class="view-header">
+    <button class="btn-back" id="viewBack">←</button>
+    <span class="view-date" id="viewDateLabel"></span>
+    <button class="btn-delete" id="btnDelete">delete</button>
+  </div>
+  <div class="view-body" id="viewBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── CONFIG ──
+const SB_URL  = 'https://zqdmxywinwbxhrrrqcrx.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxZG14eXdpbndieGhycnJxY3J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNjU1MTksImV4cCI6MjA5Mzk0MTUxOX0.yEkHrArXalsuSNNR5ipWlYZ7d6mvhIrgPjqnlkE_rTM';
+const sb = supabase.createClient(SB_URL, SB_ANON);
+
+// ── STATE ──
+let entries = []; // array of entry objects, newest first
+let viewingId = null;
+
+// ── SCREENS ──
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── TOAST ──
+let _tt;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_tt); _tt = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ── SYNC UI ──
+function setSync(state, msg) {
+  const dot = document.getElementById('syncDot');
+  const lbl = document.getElementById('syncLabel');
+  if (dot) dot.className = 'sync-dot ' + state;
+  if (lbl) lbl.textContent = msg;
+}
+
+// ── STORAGE (Supabase key: 'journal') ──
+async function pushEntries() {
+  try {
+    setSync('syncing', 'saving…');
+    const { error } = await sb.from('cmd_state').upsert(
+      { key: 'journal', value: entries, updated_at: new Date().toISOString() },
+      { onConflict: 'key' }
+    );
+    if (error) { setSync('err', 'error'); console.error(error); return; }
+    setSync('ok', 'saved');
+  } catch(e) {
+    setSync('err', 'offline');
+    saveLocal();
+  }
+}
+
+async function pullEntries() {
+  try {
+    setSync('syncing', 'loading…');
+    const { data, error } = await sb.from('cmd_state').select('value').eq('key', 'journal').single();
+    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows
+      console.error(error);
+      setSync('err', 'offline');
+      loadLocal();
+      return;
+    }
+    if (data && data.value) entries = data.value;
+    else entries = loadLocal();
+    setSync('ok', 'synced');
+  } catch(e) {
+    console.error(e);
+    setSync('err', 'offline');
+    entries = loadLocal();
+  }
+}
+
+function saveLocal() {
+  try { localStorage.setItem('journal_entries', JSON.stringify(entries)); } catch {}
+}
+function loadLocal() {
+  try { return JSON.parse(localStorage.getItem('journal_entries') || '[]'); } catch { return []; }
+}
+
+// ── DATE ──
+function todayKey() {
+  return new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+}
+function formatDate(key) {
+  const d = new Date(key + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+}
+function formatDateShort(key) {
+  const d = new Date(key + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' }).toUpperCase();
+}
+
+// ── HOME ──
+document.getElementById('btnBegin').addEventListener('click', () => {
+  const today = todayKey();
+  const existing = entries.find(e => e.date === today);
+
+  // Pre-fill if editing today's entry
+  if (existing) {
+    document.getElementById('well1').value = existing.well[0] || '';
+    document.getElementById('well2').value = existing.well[1] || '';
+    document.getElementById('well3').value = existing.well[2] || '';
+    document.getElementById('struggle1').value = existing.struggle[0] || '';
+    document.getElementById('struggle2').value = existing.struggle[1] || '';
+    document.getElementById('forward').value = existing.forward || '';
+  } else {
+    ['well1','well2','well3','struggle1','struggle2','forward'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+  }
+
+  document.getElementById('entryDateLabel').textContent = formatDateShort(today);
+  show('entryScreen');
+  setTimeout(() => document.getElementById('well1').focus(), 300);
+});
+
+document.getElementById('btnHistory').addEventListener('click', () => {
+  renderHistory();
+  show('historyScreen');
+});
+
+// ── ENTRY ──
+document.getElementById('entryBack').addEventListener('click', () => show('homeScreen'));
+
+document.getElementById('btnSave').addEventListener('click', async () => {
+  const well = [
+    document.getElementById('well1').value.trim(),
+    document.getElementById('well2').value.trim(),
+    document.getElementById('well3').value.trim(),
+  ].filter(Boolean);
+
+  const struggle = [
+    document.getElementById('struggle1').value.trim(),
+    document.getElementById('struggle2').value.trim(),
+  ].filter(Boolean);
+
+  const forward = document.getElementById('forward').value.trim();
+
+  if (!well.length && !struggle.length && !forward) {
+    toast('Nothing to save yet.');
+    return;
+  }
+
+  const today = todayKey();
+  const entry = { date: today, well, struggle, forward, saved: new Date().toISOString() };
+
+  // Replace today's entry if exists, else prepend
+  const idx = entries.findIndex(e => e.date === today);
+  if (idx >= 0) entries[idx] = entry;
+  else entries.unshift(entry);
+
+  saveLocal();
+  await pushEntries();
+  toast('Saved. Late is not lost.');
+  setTimeout(() => show('homeScreen'), 600);
+});
+
+// Auto-resize textareas
+document.querySelectorAll('.prompt-input').forEach(ta => {
+  ta.addEventListener('input', () => {
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+  });
+});
+
+// ── HISTORY ──
+document.getElementById('histBack').addEventListener('click', () => show('homeScreen'));
+
+function renderHistory() {
+  const body = document.getElementById('histBody');
+  if (!entries.length) {
+    body.innerHTML = '<div class="hist-empty">No entries yet.<br>Begin your first one.</div>';
+    return;
+  }
+  body.innerHTML = entries.map(e => `
+    <div class="hist-entry" data-id="${e.date}">
+      <div class="hist-entry-date">${formatDateShort(e.date)}</div>
+      <div class="hist-preview">${esc(e.well.join(' · '))}</div>
+    </div>
+  `).join('');
+  body.querySelectorAll('.hist-entry').forEach(el => {
+    el.addEventListener('click', () => {
+      viewEntry(el.dataset.id);
+    });
+  });
+}
+
+// ── VIEW ENTRY ──
+document.getElementById('viewBack').addEventListener('click', () => {
+  renderHistory(); show('historyScreen');
+});
+
+document.getElementById('btnDelete').addEventListener('click', async () => {
+  if (!viewingId) return;
+  if (!confirm('Delete this entry?')) return;
+  entries = entries.filter(e => e.date !== viewingId);
+  saveLocal();
+  await pushEntries();
+  toast('Entry deleted.');
+  renderHistory();
+  show('historyScreen');
+});
+
+function viewEntry(dateKey) {
+  viewingId = dateKey;
+  const entry = entries.find(e => e.date === dateKey);
+  if (!entry) return;
+
+  document.getElementById('viewDateLabel').textContent = formatDateShort(dateKey);
+
+  const body = document.getElementById('viewBody');
+  body.innerHTML = `
+    <div class="view-section">
+      <div class="view-section-head">
+        <div class="view-section-num n3">3</div>
+        <div class="view-section-lbl">things you did well</div>
+      </div>
+      <div class="view-items">
+        ${entry.well.map(w => `<div class="view-item">${esc(w)}</div>`).join('') || '<div class="view-item" style="color:var(--faint);font-style:italic;">—</div>'}
+      </div>
+    </div>
+    <div class="view-section">
+      <div class="view-section-head">
+        <div class="view-section-num n2">2</div>
+        <div class="view-section-lbl">things you struggled with</div>
+      </div>
+      <div class="view-items">
+        ${entry.struggle.map(s => `<div class="view-item">${esc(s)}</div>`).join('') || '<div class="view-item" style="color:var(--faint);font-style:italic;">—</div>'}
+      </div>
+    </div>
+    <div class="view-section">
+      <div class="view-section-head">
+        <div class="view-section-num n1">1</div>
+        <div class="view-section-lbl">forward focus</div>
+      </div>
+      <div class="view-items">
+        ${entry.forward ? `<div class="view-item">${esc(entry.forward)}</div>` : '<div class="view-item" style="color:var(--faint);font-style:italic;">—</div>'}
+      </div>
+    </div>
+  `;
+  show('viewScreen');
+}
+
+function esc(s) {
+  const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+}
+
+// ── BOOT ──
+async function boot() {
+  await pullEntries();
+}
+boot();
+</script>
+</body>
+</html>
