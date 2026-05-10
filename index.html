@@ -307,6 +307,114 @@ body::after {
 @keyframes fadeUp { from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none} }
 .sidebar > * { animation: fadeUp 0.3s ease both; }
 .main-col > * { animation: fadeUp 0.35s ease both; }
+
+/* ── MOBILE ── */
+@media (max-width: 700px) {
+  body { overflow: auto; height: auto; font-size: 14px; }
+
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  /* Reorder: sidebar first (timer+tasks), then chores, then sleep+movement */
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    overflow: visible;
+    order: 1;
+  }
+
+  .main-col {
+    overflow: visible;
+    order: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Chores floats to top of main col */
+  .chores-section { order: 1; }
+  .sec-head:has(+ .chores-section) { order: 1; }
+
+  /* Sleep and movement go below */
+  .sleep-wrap { order: 3; }
+  .move-strip { order: 4; }
+
+  /* Kill fixed heights everywhere */
+  .task-panel,
+  .task-scroll,
+  .chores-section,
+  .chore-scroll { height: auto; overflow: visible; min-height: unset; flex: none; }
+
+  /* Top bar */
+  .top-bar { padding: 14px 18px 12px; }
+  .logo { font-size: 20px; }
+  .hdate { font-size: 11px; }
+  .anchor { font-size: 11px; }
+
+  /* Sync bar */
+  .sync-bar { padding: 5px 18px; font-size: 10px; }
+
+  /* Timer — bigger on mobile */
+  .timer-wrap { padding: 20px 18px 16px; }
+  .timer-num { font-size: 80px; }
+  .timer-focus-lbl { font-size: 12px; margin-bottom: 14px; }
+  .pre-btn { font-size: 12px; padding: 5px 12px; }
+  .t-btn { font-size: 16px; padding: 10px 20px; }
+  .t-task-in { font-size: 14px; padding: 9px 12px; margin-bottom: 10px; }
+  .t-bar { height: 3px; }
+
+  /* Sec heads */
+  .sec-head { padding: 10px 18px 8px; font-size: 11px; }
+
+  /* Tasks */
+  .task-add { border-bottom: 1px solid var(--border); }
+  .task-in { font-size: 14px; padding: 12px 16px; }
+  .btn-add-t { font-size: 24px; padding: 0 16px; }
+  .task-item { padding: 11px 18px; gap: 10px; }
+  .t-chk { width: 16px; height: 16px; }
+  .t-name { font-size: 13px; }
+  .t-focus-btn { opacity: 1; font-size: 10px; padding: 3px 7px; }
+  .t-del { opacity: 0.35; font-size: 16px; }
+  .task-foot { padding: 10px 18px; }
+  .btn-clear-t { font-size: 11px; padding: 6px 12px; }
+
+  /* Movement strip — stack 2x2 */
+  .move-strip { flex-wrap: wrap; }
+  .m-stat { flex: 1 1 45%; border-right: none; border-bottom: 1px solid var(--border); padding: 12px 18px; }
+  .m-stat:last-child { flex: 1 1 100%; border-bottom: none; }
+  .m-in { font-size: 28px; }
+  .m-lbl { font-size: 10px; }
+  .m-unit { font-size: 10px; }
+
+  /* Sleep */
+  .sleep-wrap { padding: 16px 18px; }
+  .sleep-grid { gap: 12px; margin-bottom: 14px; }
+  .sl-field input { font-size: 20px; padding: 6px 10px; }
+  .q-dot { width: 30px; height: 30px; font-size: 14px; }
+  .sl-note { font-size: 13px; padding: 8px 10px; }
+  .btn-log-sl { font-size: 14px; padding: 0 14px; }
+  .sl-rec { font-size: 12px; padding: 6px 0; }
+  .sl-h { font-size: 18px; }
+
+  /* Chores */
+  .chore-add-row { border-bottom: 1px solid var(--border); }
+  .chore-in { font-size: 14px; padding: 12px 16px; }
+  .btn-add-c { font-size: 24px; padding: 0 16px; }
+  .chore-item { padding: 11px 18px; gap: 10px; }
+  .c-chk { width: 16px; height: 16px; }
+  .c-name { font-size: 13px; }
+  .c-del { opacity: 0.35; font-size: 15px; }
+  .chore-foot { padding: 10px 18px; }
+  .btn-clear-c { font-size: 11px; padding: 6px 12px; }
+  .chore-hint { font-size: 10px; }
+  .drag-handle span { width: 14px; }
+
+  /* Toast */
+  .toast { bottom: 12px; right: 12px; left: 12px; text-align: center; font-size: 12px; }
+}
 </style>
 </head>
 <body>
@@ -353,7 +461,7 @@ body::after {
   </div>
 
   <div class="main-col">
-    <div class="move-strip">
+    <div class="move-strip" style="order:4;">
       <div class="m-stat">
         <div class="m-lbl">Steps</div>
         <input type="number" class="m-in" id="mSteps" placeholder="—">
@@ -375,8 +483,8 @@ body::after {
         <div class="m-unit">OPTIONAL</div>
       </div>
     </div>
-    <div class="sec-head">Sleep Log</div>
-    <div class="sleep-wrap">
+    <div class="sec-head" style="order:3;">Sleep Log</div>
+    <div class="sleep-wrap" style="order:3;">
       <div class="sleep-grid">
         <div class="sl-field"><label>Lights Out</label><input type="time" id="slBed"></div>
         <div class="sl-field"><label>Wake Up</label><input type="time" id="slWake"></div>
@@ -396,8 +504,8 @@ body::after {
       </div>
       <div class="sl-history" id="slHistory"></div>
     </div>
-    <div class="sec-head">Chore List <span class="badge" id="choreBadge"></span></div>
-    <div class="chores-section">
+    <div class="sec-head" style="order:1;">Chore List <span class="badge" id="choreBadge"></span></div>
+    <div class="chores-section" style="order:2;">
       <div class="chore-add-row">
         <input type="text" class="chore-in" id="choreIn" placeholder="Add a chore…">
         <button class="btn-add-c" id="addChoreBtn">+</button>
