@@ -550,6 +550,8 @@ function toast(msg) {
   el.textContent = msg; el.classList.add('show');
   clearTimeout(_tt); _tt = setTimeout(()=>el.classList.remove('show'), 2400);
 }
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
 function beep() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
