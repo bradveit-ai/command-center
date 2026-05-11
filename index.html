@@ -421,27 +421,15 @@ body::after {
 
   <!-- MAIN COLUMN -->
   <div class="main-col">
-    <div class="move-strip">
-      <div class="m-stat">
-        <div class="m-lbl">Steps</div>
-        <input type="number" class="m-in" id="mSteps" placeholder="—">
-        <div class="m-unit">TODAY</div>
-      </div>
-      <div class="m-stat">
-        <div class="m-lbl">Dog Walk</div>
-        <input type="number" class="m-in" id="mWalk" placeholder="—">
-        <div class="m-unit">MIN</div>
-      </div>
-      <div class="m-stat">
-        <div class="m-lbl">Ride</div>
-        <input type="number" class="m-in" id="mRide" placeholder="—">
-        <div class="m-unit">KM</div>
-      </div>
-      <div class="m-stat">
-        <div class="m-lbl">Notes</div>
-        <input type="text" class="m-in" style="font-size:13px;" id="mNotes" placeholder="—">
-        <div class="m-unit">OPTIONAL</div>
-      </div>
+    <div class="sec-head">Chore List <span class="badge" id="choreBadge"></span></div>
+    <div class="chore-add-row">
+      <input type="text" class="chore-in" id="choreIn" placeholder="Add a chore…">
+      <button class="btn-add-c" id="addChoreBtn">+</button>
+    </div>
+    <ul class="chore-list" id="choreList"></ul>
+    <div class="chore-foot">
+      <button class="btn-clear-c" id="clearDoneChores">Clear done</button>
+      <span class="chore-hint">drag to reorder</span>
     </div>
     <div class="sec-head">Sleep Log</div>
     <div class="sleep-wrap">
@@ -464,15 +452,28 @@ body::after {
       </div>
       <div class="sl-history" id="slHistory"></div>
     </div>
-    <div class="sec-head">Chore List <span class="badge" id="choreBadge"></span></div>
-    <div class="chore-add-row">
-      <input type="text" class="chore-in" id="choreIn" placeholder="Add a chore…">
-      <button class="btn-add-c" id="addChoreBtn">+</button>
-    </div>
-    <ul class="chore-list" id="choreList"></ul>
-    <div class="chore-foot">
-      <button class="btn-clear-c" id="clearDoneChores">Clear done</button>
-      <span class="chore-hint">drag to reorder</span>
+    <div class="sec-head">Movement</div>
+    <div class="move-strip">
+      <div class="m-stat">
+        <div class="m-lbl">Steps</div>
+        <input type="number" class="m-in" id="mSteps" placeholder="—">
+        <div class="m-unit">TODAY</div>
+      </div>
+      <div class="m-stat">
+        <div class="m-lbl">Dog Walk</div>
+        <input type="number" class="m-in" id="mWalk" placeholder="—">
+        <div class="m-unit">MIN</div>
+      </div>
+      <div class="m-stat">
+        <div class="m-lbl">Ride</div>
+        <input type="number" class="m-in" id="mRide" placeholder="—">
+        <div class="m-unit">KM</div>
+      </div>
+      <div class="m-stat">
+        <div class="m-lbl">Notes</div>
+        <input type="text" class="m-in" style="font-size:13px;" id="mNotes" placeholder="—">
+        <div class="m-unit">OPTIONAL</div>
+      </div>
     </div>
   </div>
 
