@@ -291,6 +291,52 @@ body::after {
 .btn-clear-c:hover { color: var(--dim); border-color: var(--border2); }
 .chore-hint { color: var(--faint); font-size: 9px; letter-spacing: 0.06em; margin-left: auto; }
 
+/* PANDORA */
+.pandora-panel {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pandora-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  padding: 8px 14px;
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+  flex: 1;
+}
+.pandora-btn:hover {
+  border-color: var(--amber-dim);
+  background: var(--amber-glow);
+  color: var(--amber);
+}
+.pandora-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--amber);
+}
+.pandora-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+}
+.pandora-hint {
+  font-size: 9px;
+  color: var(--faint);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
@@ -458,9 +504,19 @@ body::after {
         <button class="btn-clear-t" id="clearTasksBtn">Clear done</button>
       </div>
     </div>
-  </div>
 
-  <div class="main-col">
+    <div class="sec-head">Music</div>
+    <div class="pandora-panel">
+      <a href="pandora://" class="pandora-btn" title="Open Pandora">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="pandora-icon">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" fill="currentColor"/>
+        </svg>
+        <span class="pandora-label">Open Pandora</span>
+      </a>
+      <div class="pandora-hint">opens desktop app</div>
+    </div>
+
+  </div>
     <div class="move-strip" style="order:4;">
       <div class="m-stat">
         <div class="m-lbl">Steps</div>
